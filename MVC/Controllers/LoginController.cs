@@ -6,7 +6,7 @@ namespace cosc_4353_project.Controllers
     {
         public IActionResult login()
         {
-            return View();
+            return View(); //test
         }
         public IActionResult register()
         {
