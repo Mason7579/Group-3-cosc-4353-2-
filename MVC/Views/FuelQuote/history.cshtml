@@ -1,0 +1,72 @@
+﻿@{
+    ViewData["Title"] = "history";
+}
+@using Microsoft.AspNetCore.Authorization;
+@using Microsoft.AspNetCore.Mvc;
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fuel Quote History</title>
+    <style>
+        h1 {
+            color: #333;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #333;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Fuel Quote History</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Gallons Requested</th>
+                <th>Delivery Address</th>
+                <th>Delivery Date</th>
+                <th>Suggested Price / gallon</th>
+                <th>Total Amount Due</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>100</td>
+                <td>123 Main St, Cityville</td>
+                <td>2023-09-20</td>
+                <td>$2.50</td>
+                <td>$250.00</td>
+            </tr>
+            <tr>
+                <td>150</td>
+                <td>456 Elm St, Townville</td>
+                <td>2023-09-21</td>
+                <td>$2.75</td>
+                <td>$412.50</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
