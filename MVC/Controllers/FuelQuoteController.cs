@@ -8,5 +8,10 @@ namespace cosc_4353_project.Controllers
         {
             return View();
         }
+        public IActionResult FuelQuoteForm()
+        {
+            return View();
+        }
+
     }
 }
