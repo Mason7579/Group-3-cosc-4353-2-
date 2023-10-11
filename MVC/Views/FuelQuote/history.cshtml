@@ -3,6 +3,8 @@
 }
 @using Microsoft.AspNetCore.Authorization;
 @using Microsoft.AspNetCore.Mvc;
+@using cosc_4353_project.Models;
+@model cosc_4353_project.Models.FuelQuoteHistory
 <!DOCTYPE html>
 <html>
 <head>
@@ -66,6 +68,18 @@
                 <td>$2.75</td>
                 <td>$412.50</td>
             </tr>
+            @{
+                foreach (FuelQuoteModel history in Model.History)
+                {
+                    <tr>
+                        <td>@history.Gallons_Requested</td>
+                        <td>@history.Delivery_Address</td>
+                        <td>@history.Delivery_Date</td>
+                        <td>@history.Suggested_Price</td>
+                        <td>@history.Total_Amount_Due</td>
+                    </tr>
+                }
+            }
         </tbody>
     </table>
 </body>

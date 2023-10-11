@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace cosc_4353_project.Controllers
 {
@@ -13,9 +14,12 @@ namespace cosc_4353_project.Controllers
         [HttpPost]
         public IActionResult login(string username, string password)
         {
+            string Username = username;
+            string Password = password;
             // TODO: Add validation logic here
 
             // For now, just returning to the login view with a success message
+            Response.Cookies.Append("username_cookies", Username);
             ViewBag.Message = "Login successful!";
             return View();
         }
