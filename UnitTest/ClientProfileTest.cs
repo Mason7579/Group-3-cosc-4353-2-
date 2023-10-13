@@ -19,9 +19,7 @@ namespace UnitTest
                 State = "TX",
                 Zipcode = "12345"
             };
-
             var result = controller.Profile(model) as ContentResult;
-
             Assert.NotNull(result);
             Assert.Equal("Profile saved successfully!", result.Content);
         }
@@ -38,12 +36,8 @@ namespace UnitTest
                 State = "TX",
                 Zipcode = "12345"
             };
-
-            // Assuming ModelState is used for validation
             controller.ModelState.AddModelError("FullName", "Full Name is required");
-
             var result = controller.Profile(model) as ViewResult;
-
             Assert.NotNull(result);
             Assert.Equal("Profile", result.ViewName);
         }
