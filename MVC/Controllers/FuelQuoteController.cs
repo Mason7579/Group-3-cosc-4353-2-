@@ -27,9 +27,27 @@ namespace cosc_4353_project.Controllers
 
             return View(view);
         }
+
+        [HttpGet]
         public IActionResult FuelQuoteForm()
         {
-            return View();
+            FuelQuoteModel profile = new FuelQuoteModel()
+            {
+                Client = new List<ClientProfileModel>()
+            };
+            ClientProfileModel clientFQ = new ClientProfileModel()
+            {
+                Address1 = "456 HelloWorld St. TX",
+            };
+            profile.Client.Add(clientFQ);
+            return View(profile);
+        }
+
+        [HttpPost]
+        public IActionResult FuelQuoteFormDB(double gallonsRequested, string deliveryAddress, string deliveryDate, double suggestedPrice, double totalAmountDue)
+        {
+
+            return RedirectToAction("history", "FuelQuote");
         }
 
     }

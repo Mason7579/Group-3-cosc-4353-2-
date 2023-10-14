@@ -1,6 +1,8 @@
 @{ ViewData["Title"] = "FuelQuoteForm"; } 
 @using Microsoft.AspNetCore.Authorization; 
 @using Microsoft.AspNetCore.Mvc;
+@using cosc_4353_project.Models;
+@model cosc_4353_project.Models.FuelQuoteModel
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -31,14 +33,14 @@
   <body>
     <div class="form">
       <h2>Fuel Quote Form</h2>
-      <form action="/submit" method="post">
+       <form action="FuelQuoteFormDB" method="post">
         <label for="gallonsRequested">Gallons Requested:</label>
         <br>
         <input type="number" id="gallonsRequested" name="gallonsRequested" min="1" required>
         <br>
         <label for="deliveryAddress">Delivery Address:</label>
         <br>
-        <input type="text" id="deliveryAddress" name="deliveryAddress" readonly>
+        <input type="text" id="deliveryAddress" name="deliveryAddress" value="@Model.Client[0].Address1" readonly>
         <br>
         <label for="deliveryDate">Delivery Date:</label>
         <br>
@@ -52,7 +54,7 @@
         <br>
         <input type="number" id="totalAmountDue" name="totalAmountDue" readonly>
         <br>
-        <button type="button" onclick="calculateTotalAmount()" style="background-color: #007BFF; padding: 8px 15px; border: none; border-radius: 4px; color: #fff; cursor: pointer;">Calculate</button>
+        <button type="submit" onclick="calculateTotalAmount()" style="background-color: #007BFF; padding: 8px 15px; border: none; border-radius: 4px; color: #fff; cursor: pointer;">Calculate</button>
       </form>
     </div>
     <script>

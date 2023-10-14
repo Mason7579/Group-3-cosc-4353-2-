@@ -32,5 +32,7 @@ namespace cosc_4353_project.Models
         [Required(ErrorMessage = "Zipcode is required.")]
         [RegularExpression(@"^\d{5}(-\d{4})?$", ErrorMessage = "Please enter a valid zipcode.")]
         public string Zipcode { get; set; }
+
+        public string Username { get; set; }
     }
 }
