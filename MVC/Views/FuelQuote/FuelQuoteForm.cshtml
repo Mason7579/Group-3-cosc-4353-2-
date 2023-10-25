@@ -33,28 +33,28 @@
   <body>
     <div class="form">
       <h2>Fuel Quote Form</h2>
-       <form action="FuelQuoteFormDB" method="post">
+        <form action="/FuelQuote/FuelQuoteFormDB" method="post">
         <label for="gallonsRequested">Gallons Requested:</label>
         <br>
-        <input type="number" id="gallonsRequested" name="gallonsRequested" min="1" required>
+            <input type="number" id="gallonsRequested" name="gallonsRequested" min="1" required>
         <br>
         <label for="deliveryAddress">Delivery Address:</label>
         <br>
-        <input type="text" id="deliveryAddress" name="deliveryAddress" value="@Model.Client[0].Address1" readonly>
+            <input type="text" id="deliveryAddress" name="deliveryAddress" value="@Model.Client[0].Address1" required>
         <br>
         <label for="deliveryDate">Delivery Date:</label>
         <br>
-        <input type="date" id="deliveryDate" name="deliveryDate" required>
+            <input type="date" id="deliveryDate" name="deliveryDate" required>
         <br>
         <label for="suggestedPrice">Suggested Price:</label>
         <br>
-        <input type="number" id="suggestedPrice" name="suggestedPrice" readonly>
+            <input type="number" id="suggestedPrice" name="suggestedPrice" required>
         <br>
         <label for="totalAmountDue">Total Amount Due:</label>
         <br>
-        <input type="number" id="totalAmountDue" name="totalAmountDue" readonly>
+            <input type="number" id="totalAmountDue" name="totalAmountDue" required>
         <br>
-        <button type="submit" onclick="calculateTotalAmount()" style="background-color: #007BFF; padding: 8px 15px; border: none; border-radius: 4px; color: #fff; cursor: pointer;">Calculate</button>
+            <button type="submit" onclick="calculateTotalAmount()" style="background-color: #007BFF; padding: 8px 15px; border: none; border-radius: 4px; color: #fff; cursor: pointer;">Calculate</button>
       </form>
     </div>
     <script>

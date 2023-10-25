@@ -17,6 +17,7 @@ namespace cosc_4353_project.Models
         public double? Suggested_Price { get; set; }
         public double? Total_Amount_Due { get; set; }
         public string? Delivery_Address { get; set; }
+        public int? ID { get; set; }
 
         public List<ClientProfileModel> Client = new List<ClientProfileModel>();
     }
