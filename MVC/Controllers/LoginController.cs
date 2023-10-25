@@ -34,8 +34,10 @@ namespace cosc_4353_project.Controllers
                     if (reader.HasRows)
                     {
                         Response.Cookies.Append("username_cookie", model.Username);
-                        ViewBag.Message = "Login successful!";
-                        return View();
+                        
+                        
+                        return RedirectToAction("Profile", "ClientProfile");
+
                     }
                     else
                     {
