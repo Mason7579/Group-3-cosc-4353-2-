@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 using NpgsqlTypes;
 using System.Data;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using System;
 
 namespace cosc_4353_project.Controllers
