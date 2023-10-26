@@ -1,4 +1,4 @@
-﻿using Xunit;
+using Xunit;
 using cosc_4353_project.Controllers;
 using cosc_4353_project.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +8,7 @@ namespace UnitTest
     public class ClientProfileTest
     {
         [Fact]
-        public void Test_Profile_Post_Valid_Model()
+        public void Test_SaveProfile_Post_Valid_Model()
         {
             var controller = new ClientProfileController();
             var model = new ClientProfileModel
@@ -19,13 +19,13 @@ namespace UnitTest
                 State = "TX",
                 Zipcode = "12345"
             };
-            var result = controller.Profile(model) as ContentResult;
+            var result = controller.SaveProfile(model) as RedirectToActionResult;
             Assert.NotNull(result);
-            Assert.Equal("Profile saved successfully!", result.Content);
+            Assert.Equal("ProfileSaved", result.ActionName);
         }
 
         [Fact]
-        public void Test_Profile_Post_Invalid_Model()
+        public void Test_SaveProfile_Post_Invalid_Model()
         {
             var controller = new ClientProfileController();
             var model = new ClientProfileModel
@@ -37,7 +37,7 @@ namespace UnitTest
                 Zipcode = "12345"
             };
             controller.ModelState.AddModelError("FullName", "Full Name is required");
-            var result = controller.Profile(model) as ViewResult;
+            var result = controller.SaveProfile(model) as ViewResult;
             Assert.NotNull(result);
             Assert.Equal("Profile", result.ViewName);
         }
