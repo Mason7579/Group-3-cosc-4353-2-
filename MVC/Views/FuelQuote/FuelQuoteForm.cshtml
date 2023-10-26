@@ -40,7 +40,7 @@
         <br>
         <label for="deliveryAddress">Delivery Address:</label>
         <br>
-            <input type="text" id="deliveryAddress" name="deliveryAddress" value="@Model.Client[0].Address1" required>
+            <input type="text" id="deliveryAddress" name="deliveryAddress" value="@Model.Client[0].Address1 @Model.Client[0].City @Model.Client[0].State @Model.Client[0].Zipcode" required>
         <br>
         <label for="deliveryDate">Delivery Date:</label>
         <br>

@@ -3,6 +3,7 @@ using Npgsql;
 using System.Security.Cryptography;
 using System.Text;
 using cosc_4353_project.Models;
+using System.Reflection;
 
 namespace cosc_4353_project.Controllers
 {
@@ -36,7 +37,7 @@ namespace cosc_4353_project.Controllers
                         Response.Cookies.Append("username_cookie", model.Username);
                         
                         
-                        return RedirectToAction("Profile", "ClientProfile");
+                        return RedirectToAction("history", "Fuelquote");
 
                     }
                     else
@@ -81,7 +82,6 @@ namespace cosc_4353_project.Controllers
             ViewBag.Message = "Registration successful!";
             return View();
         }
-
         private string ComputeSha256Hash(string rawData)
         {
             using (SHA256 sha256Hash = SHA256.Create())
@@ -94,6 +94,17 @@ namespace cosc_4353_project.Controllers
                 }
                 return builder.ToString();
             }
+        }
+        [HttpGet]
+        public IActionResult logout()
+        {
+            string value = string.Empty;
+            CookieOptions options = new CookieOptions()
+            {
+                Expires = DateTime.Now.AddDays(-1)
+            };
+            Response.Cookies.Append("username_cookie", value, options);
+            return RedirectToAction("login", "Login");
         }
     }
 }
