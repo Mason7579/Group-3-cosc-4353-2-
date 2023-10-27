@@ -19,9 +19,11 @@ namespace UnitTest
                 State = "TX",
                 Zipcode = "12345"
             };
-            var result = controller.SaveProfile(model) as RedirectToActionResult;
+
+            var result = controller.SaveProfile(model) as ViewResult;
             Assert.NotNull(result);
-            Assert.Equal("ProfileSaved", result.ActionName);
+            Assert.Equal("Profile", result.ViewName); 
+            Assert.Equal("Profile saved successfully!", model.SuccessMessage);
         }
 
         [Fact]
