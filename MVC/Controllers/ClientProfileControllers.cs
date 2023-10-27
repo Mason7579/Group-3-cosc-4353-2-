@@ -2,14 +2,14 @@ using cosc_4353_project.Models;
 using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 using NpgsqlTypes;
-using System.Data;
 using System;
+using System.Data;
 
 namespace cosc_4353_project.Controllers
 {
     public class ClientProfileController : Controller
     {
-        private static string _connectionString = @"Server=cosc4353-group-3.postgres.database.azure.com;Port=5432;Database=cosc4353-homework;User Id=vscode@cosc4353-group-3;Password=vscode123;";
+        private readonly string _connectionString = @"Server=cosc4353-group-3.postgres.database.azure.com;Port=5432;Database=cosc4353-homework;User Id=vscode@cosc4353-group-3;Password=vscode123;";
 
         [HttpGet]
         public IActionResult Profile()
@@ -85,7 +85,9 @@ namespace cosc_4353_project.Controllers
                         }
                     }
 
-                    return RedirectToAction("ProfileSaved");
+                    model.SuccessMessage = "Profile saved successfully!";
+
+                    return View("Profile", model);
                 }
             }
 
