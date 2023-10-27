@@ -1,8 +1,10 @@
-﻿@{
-    ViewData["Title"] = "Profile";
+@{
+        ViewData["Title"] = "Profile";
 }
 @using Microsoft.AspNetCore.Authorization;
 @using Microsoft.AspNetCore.Mvc;
+@model cosc_4353_project.Models.ClientProfileModel
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,6 +28,12 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6 offset-md-3">
+                @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+                {
+                    <div class="alert alert-success">
+                        @Model.SuccessMessage
+                    </div>
+                }
                 <form id="profileForm" asp-action="SaveProfile" method="post" enctype="multipart/form-data" style="max-width: 400px; margin: 0 auto;">
                     <h2>Client Profile</h2>
                     <div class="form-group">
