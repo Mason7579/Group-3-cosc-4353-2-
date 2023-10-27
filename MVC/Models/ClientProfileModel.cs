@@ -34,5 +34,7 @@ namespace cosc_4353_project.Models
         public string Zipcode { get; set; }
 
         public string Username { get; set; }
+
+        public string SuccessMessage { get; set; }
     }
 }
