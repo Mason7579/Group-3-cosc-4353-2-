@@ -1,62 +1,63 @@
-﻿using cosc_4353_project.Controllers;
+﻿using Xunit;
+using Moq;
+using cosc_4353_project.Controllers;
 using cosc_4353_project.Models;
 using Microsoft.AspNetCore.Mvc;
-using Xunit;
+using Microsoft.AspNetCore.Http;
 
 namespace UnitTest
 {
-    public class LoginControllerTest
+    public class LoginControllerTests
     {
         [Fact]
-        public void Test_Login_Get_ReturnsView()
+        public void Test_Login_ValidCredentials()
         {
-            // Arrange
-            var controller = new LoginController();
+            var mockLoginViewModel = new LoginViewModel
+            {
+                Username = "testuser",
+                Password = "testpass"
+            };
 
-            // Act
-            var result = controller.login() as ViewResult;
+            var mockHttpContext = new Mock<HttpContext>();
+            var response = new Mock<HttpResponse>();
+            mockHttpContext.Setup(m => m.Response).Returns(response.Object);
 
-            // Assert
-            Assert.NotNull(result);
+            var mockCookies = new Mock<IResponseCookies>();
+            response.SetupGet(r => r.Cookies).Returns(mockCookies.Object);
+
+            var mockController = new LoginController()
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = mockHttpContext.Object
+                }
+            };
+
+            var result = mockController.login(mockLoginViewModel);
+
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("history", redirectResult.ActionName);
+            Assert.Equal("Fuelquote", redirectResult.ControllerName);
         }
 
         [Fact]
-        public void Test_Login_Post_WithValidCredentials_RedirectsToHistory()
+        public void Test_Register_Successful()
         {
-            // Arrange
-            var controller = new LoginController();
-            var model = new LoginViewModel
+
+            var mockRegisterViewModel = new RegisterViewModel
             {
-                Username = "admin",
-                Password = "admin123"
+                Username = "testuser",
+                Password = "testpass",
+                ConfirmPassword = "testpass"
             };
 
-            // Act
-            var result = controller.login(model) as RedirectToActionResult;
+            var mockController = new LoginController();
+            var resultView = new ViewResult();
 
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal("history", result.ActionName);
-            Assert.Equal("Fuelquote", result.ControllerName);
-        }
+            var result = mockController.register(mockRegisterViewModel);
 
-        [Fact]
-        public void Test_Login_Post_WithInvalidCredentials_ReturnsViewWithMessage()
-        {
-            // Arrange
-            var controller = new LoginController();
-            var model = new LoginViewModel
-            {
-                Username = "invalidusername",
-                Password = "invalidpassword"
-            };
-
-            // Act
-            var result = controller.login(model) as ViewResult;
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal("Invalid credentials!", controller.ViewBag.Message);
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.Null(viewResult.ViewName);
         }
     }
 }
