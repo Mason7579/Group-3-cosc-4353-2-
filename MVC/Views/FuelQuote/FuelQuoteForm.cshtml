@@ -7,6 +7,7 @@
 <html lang="en">
   <head>
     <title>Fuel Quote Form</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   </head>
   <style>
     .form {
@@ -36,11 +37,11 @@
         <form action="/FuelQuote/FuelQuoteFormDB" method="post">
         <label for="gallonsRequested">Gallons Requested:</label>
         <br>
-            <input type="number" id="gallonsRequested" name="gallonsRequested" min="1" required>
+            <input type="number" id="gallonsRequested" name="gallonsRequested" required>
         <br>
         <label for="deliveryAddress">Delivery Address:</label>
         <br>
-            <input type="text" id="deliveryAddress" name="deliveryAddress" value="@Model.Client[0].Address1 @Model.Client[0].City @Model.Client[0].State @Model.Client[0].Zipcode" required>
+            <input type="text" id="deliveryAddress" name="deliveryAddress" value="@Model.Client[0].Address1 @Model.Client[0].City @Model.Client[0].State @Model.Client[0].Zipcode" required readOnly>
         <br>
         <label for="deliveryDate">Delivery Date:</label>
         <br>
@@ -48,19 +49,48 @@
         <br>
         <label for="suggestedPrice">Suggested Price:</label>
         <br>
-            <input type="number" id="suggestedPrice" name="suggestedPrice" required>
+            <input type="number" id="suggestedPrice" name="suggestedPrice" required readOnly>
         <br>
         <label for="totalAmountDue">Total Amount Due:</label>
         <br>
-            <input type="number" id="totalAmountDue" name="totalAmountDue" required>
+            <input type="number" id="totalAmountDue" name="totalAmountDue" required readOnly>
         <br>
-            <button type="submit" onclick="calculateTotalAmount()" style="background-color: #007BFF; padding: 8px 15px; border: none; border-radius: 4px; color: #fff; cursor: pointer;">Calculate</button>
+            <button type="button" onclick="calculateTotalAmount()" style="background-color: #007BFF; padding: 8px 15px; border: none; border-radius: 4px; color: #fff; cursor: pointer;">Calculate qeueu</button>
+        <br>
+            <br>
+            <button type="submit" style="background-color: #007BFF; padding: 8px 15px; border: none; border-radius: 4px; color: #fff; cursor: pointer;">Calculate</button>
       </form>
+        
     </div>
     <script>
       //TODO: Add JavaScript function to perform the calculation
       function calculateTotalAmount() {
-        // perform calculation here and set the value to the totalAmountDue input field
+            if (document.getElementById("gallonsRequested").value !== '' && document.getElementById("deliveryDate").value !== '') {
+              var state = "@Model.Client[0].State";
+              var gallons = document.getElementById("gallonsRequested").value;
+
+              $.ajax({
+                  url: '/FuelQuote/SG_Price', // Replace with your controller and function
+                  type: 'GET',
+                  data: {
+                      State: state,
+                      Gallons: gallons
+                  },
+                  dataType: 'json', // Expecting JSON response
+                  success: function (data) {
+                      // Handle the number returned by the controller
+                      document.getElementById("suggestedPrice").value = data.number;
+                      document.getElementById("totalAmountDue").value = gallons * data.number;
+                  },
+                  error: function () {
+                      console.error('Error calling controller function');
+                  }
+              });
+          }
+
+          else {
+                alert('Gallons Requested and Delivery Date are required!');
+           }
       }
     </script>
   </body>

@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.Xml;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Reflection.Emit;
+using System.Runtime.ConstrainedExecution;
+using System.Numerics;
 
 namespace cosc_4353_project.Controllers
 {
@@ -80,6 +82,74 @@ namespace cosc_4353_project.Controllers
             } 
         }
 
+        public bool FirstTime()
+        {
+            var cookie = Request.Cookies["username_cookie"];
+            DataTable datatable = new DataTable();
+            bool Submitted = false;
+            string Error_Message = "";
+            string SQL_Query = $"SELECT \"gallons_requested\", \"delivery_address\", \"delivery_date\", \"suggested_price\", \"total\" FROM \"fuel_quote\" WHERE \"username_fq\"=@username ";
+            using (NpgsqlConnection conn = new NpgsqlConnection(_connectionString))
+            {
+                conn.Open();
+                NpgsqlCommand command = new NpgsqlCommand("", conn);
+                NpgsqlTransaction sqlTransaction;
+                sqlTransaction = conn.BeginTransaction();
+                command.Transaction = sqlTransaction;
+                try
+                {
+                    command.CommandText = SQL_Query.ToString();
+                    command.Parameters.Clear();
+                    command.Parameters.AddWithValue("@username", cookie);
+                    NpgsqlDataAdapter sqlDataAdapter = new NpgsqlDataAdapter(command);
+                    sqlDataAdapter.Fill(datatable);
+                    Submitted = true;
+                }
+                catch (Exception e)
+                {
+                    sqlTransaction.Rollback();
+                    Error_Message = "There is an error while adding to database";
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            };
+            if (datatable.Rows.Count == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        [HttpGet]
+        public ActionResult SG_Price(string State, double Gallons)
+        {
+            double Price_Per_Gallon = 1.5;
+            double Location_Factor = 0.04;
+            if (State == "TX")
+            {
+                Location_Factor = 0.02;
+            }
+            double Rate_History_Factor = 0;
+            if (!FirstTime())
+            {
+                Rate_History_Factor = 0.01;
+            }
+            double Gallons_Requested_Factor = 0.03;
+            if (Gallons > 1000)
+            {
+                Gallons_Requested_Factor = 0.02;
+            }
+            double Company_Profit_Factor = 0.1;
+            double price = Price_Per_Gallon * (Location_Factor - Rate_History_Factor + Gallons_Requested_Factor + Company_Profit_Factor) + Price_Per_Gallon;
+            return Json(new { number = price });
+        }
+
+
         [HttpGet]
         public IActionResult FuelQuoteForm()
         {
@@ -116,7 +186,7 @@ namespace cosc_4353_project.Controllers
             };
             if (datatable.Rows.Count == 0)
             {
-                return RedirectToAction("login", "Login");
+                return RedirectToAction("Profile", "ClientProfile");
             }
             FuelQuoteModel profile = new FuelQuoteModel()
             {
