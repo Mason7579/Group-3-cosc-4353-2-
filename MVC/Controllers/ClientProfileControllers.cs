@@ -4,6 +4,8 @@ using Npgsql;
 using NpgsqlTypes;
 using System;
 using System.Data;
+using System.Reflection.Emit;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace cosc_4353_project.Controllers
 {
@@ -14,29 +16,77 @@ namespace cosc_4353_project.Controllers
         [HttpGet]
         public IActionResult Profile()
         {
-            string username = GetLoggedInUsername();
-            ClientProfileModel profile = GetClientProfile(username);
-
-            if (profile == null)
+            var cookie = Request.Cookies["username_cookie"];
+            if (cookie == null)
             {
-                profile = new ClientProfileModel();
+                return RedirectToAction("login", "Login");
             }
+            DataTable datatable = new DataTable();
+            bool Submitted = false;
+            string Error_Message = "";
+            string SQL_Query = $"SELECT * FROM \"profile\" WHERE \"username_pf\"=@username ";
+            using (NpgsqlConnection conn = new NpgsqlConnection(_connectionString))
+            {
+                conn.Open();
+                NpgsqlCommand command = new NpgsqlCommand("", conn);
+                NpgsqlTransaction sqlTransaction;
+                sqlTransaction = conn.BeginTransaction();
+                command.Transaction = sqlTransaction;
+                try
+                {
+                    command.CommandText = SQL_Query.ToString();
+                    command.Parameters.Clear();
+                    command.Parameters.AddWithValue("@username", cookie);
+                    NpgsqlDataAdapter sqlDataAdapter = new NpgsqlDataAdapter(command);
+                    sqlDataAdapter.Fill(datatable);
+                    Submitted = true;
+                }
+                catch (Exception e)
+                {
+                    sqlTransaction.Rollback();
+                    Error_Message = "There is an error while adding to database";
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            };
+            if (datatable.Rows.Count == 0)
+            {
+                ClientProfileModel clientNE = new ClientProfileModel()
+                {
+                    Address1 = "",
+                    City = "",
+                    State = "",
+                    Zipcode = "",
+                    FullName = "",
+                    Address2 = "",
 
-            return View(profile);
+                };
+                return View(clientNE);
+            }
+            ClientProfileModel client = new ClientProfileModel()
+            {
+                Address1 = datatable.Rows[0]["address_1"].ToString(),
+                City = datatable.Rows[0]["city"].ToString(),
+                State = datatable.Rows[0]["state"].ToString(),
+                Zipcode = datatable.Rows[0]["zipcode"].ToString(),
+                FullName = datatable.Rows[0]["full_name"].ToString(),
+                Address2 = datatable.Rows[0]["address_2"].ToString(),
+
+            };
+            return View(client);
         }
 
         [HttpPost]
         public IActionResult SaveProfile(ClientProfileModel model)
         {
-            string username = GetLoggedInUsername();
-
-            if (ModelState.IsValid)
-            {
+            var username = Request.Cookies["username_cookie"];
                 using (NpgsqlConnection conn = new NpgsqlConnection(_connectionString))
                 {
                     conn.Open();
 
-                    if (ProfileExists(username))
+                    if (ProfileExists())
                     {
                         using (NpgsqlCommand command = new NpgsqlCommand("UPDATE profile SET full_name = @FullName, address_1 = @Address1, address_2 = @Address2, city = @City, state = @State, zipcode = @Zipcode WHERE username_pf = @Username", conn))
                         {
@@ -89,66 +139,49 @@ namespace cosc_4353_project.Controllers
 
                     return View("Profile", model);
                 }
-            }
-
-            return View("Profile", model);
         }
 
-        private bool ProfileExists(string username)
+        private bool ProfileExists()
         {
+            var cookie = Request.Cookies["username_cookie"];
+            DataTable datatable = new DataTable();
+            bool Submitted = false;
+            string Error_Message = "";
+            string SQL_Query = $"SELECT * FROM \"profile\" WHERE \"username_pf\"=@username ";
             using (NpgsqlConnection conn = new NpgsqlConnection(_connectionString))
             {
                 conn.Open();
-                using (NpgsqlCommand command = new NpgsqlCommand("SELECT COUNT(*) FROM profile WHERE username_pf = @Username", conn))
+                NpgsqlCommand command = new NpgsqlCommand("", conn);
+                NpgsqlTransaction sqlTransaction;
+                sqlTransaction = conn.BeginTransaction();
+                command.Transaction = sqlTransaction;
+                try
                 {
-                    command.Parameters.AddWithValue("@Username", username);
-                    int count = Convert.ToInt32(command.ExecuteScalar());
-                    return count > 0;
+                    command.CommandText = SQL_Query.ToString();
+                    command.Parameters.Clear();
+                    command.Parameters.AddWithValue("@username", cookie);
+                    NpgsqlDataAdapter sqlDataAdapter = new NpgsqlDataAdapter(command);
+                    sqlDataAdapter.Fill(datatable);
+                    Submitted = true;
                 }
-            }
-        }
-
-        public IActionResult ProfileSaved()
-        {
-            return View();
-        }
-
-        private string GetLoggedInUsername()
-        {
-            return "admin";
-        }
-
-        private ClientProfileModel GetClientProfile(string username)
-        {
-            using (NpgsqlConnection conn = new NpgsqlConnection(_connectionString))
+                catch (Exception e)
+                {
+                    sqlTransaction.Rollback();
+                    Error_Message = "There is an error while adding to database";
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            };
+            if (datatable.Rows.Count == 0)
             {
-                conn.Open();
-                using (NpgsqlCommand command = new NpgsqlCommand("SELECT * FROM profile WHERE username_pf = @Username", conn))
-                {
-                    command.Parameters.AddWithValue("@Username", username);
-
-                    using (NpgsqlDataReader reader = command.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            ClientProfileModel profile = new ClientProfileModel
-                            {
-                                FullName = reader["full_name"].ToString(),
-                                Address1 = reader["address_1"].ToString(),
-                                Address2 = reader["address_2"].ToString(),
-                                City = reader["city"].ToString(),
-                                State = reader["state"].ToString(),
-                                Zipcode = reader["zipcode"].ToString(),
-                                Username = reader["username_pf"].ToString()
-                            };
-
-                            return profile;
-                        }
-                    }
-                }
+                return false;
             }
-
-            return null;
+            else
+            {
+                return true;
+            }
         }
     }
 }
