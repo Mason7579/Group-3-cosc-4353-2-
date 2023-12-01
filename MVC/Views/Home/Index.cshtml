@@ -1,15 +1,74 @@
-﻿@{
+@{
     ViewData["Title"] = "Home Page";
 }
+<style>
+    .jumbotron {
+        background-color: #343a40;
+        color: #ffffff;
+        padding: 40px;
+        margin-bottom: 0;
+    }
+
+    h1, h2, p {
+        color: #000000;
+    }
+
+    .btn-primary {
+        background-color: blue;
+        border-color: blue;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+    .btn-secondary {
+        background-color: green;
+        border-color: green;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #5a6268;
+        }
 </style>
+
 <div class="text-center">
     <h1>Fuel Rate Forecaster</h1>
+    <h2>COSC 4353 Project 2023 Fall - Group 3</h2>
     <br>
-    <h2>COSC 4353 Project 2023 Fall</h2>
-    <h2> Group 3 </h2>
-    <br>
-    <p>Mason Zhang</p>
-    <p>David Liu</p>
-    <p>Ziming Xu</p>
-    <p>Jiawei Fang</p>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                <h2>Fuel Quotes</h2>
+                <p>
+                    We provide the best service for company fuel quotes.
+                    All you have to do is fill out your customer profile, request a quote, and let us handle the rest.
+                </p>
+                <p><a class="btn btn-primary btn-lg" href="#">Request quote &raquo;</a></p>
+            </div>
+        </div>
+
+        <div class="row d-flex justify-content-center">
+            <div class="col-sm">
+                <h2>Client Profile Management</h2>
+                <p>
+                    Make things easy with our user-friendly profile tools.Keep your order history at your fingertips with persistent profiles.
+                    Get exclusive benefits by signing up for our special quoting tools.
+                </p>
+                <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+            </div>
+            <div class="col-sm mt-2">
+                <h2>Pricing Module</h2>
+                <p>
+                    Utilizing historical data,our pricing tool accurately calculates fuel costs by analyzing your location, fuel history,
+                    and current market prices.Trust us to provide precise and personalized results for your convenience.
+                </p>
+                <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+            </div>
+        </div>
+        <hr>
+    </div>
 </div>
