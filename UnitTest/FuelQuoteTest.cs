@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using cosc_4353_project.Controllers;
 using cosc_4353_project.Models;
 using Microsoft.AspNetCore.Http;
@@ -15,9 +16,10 @@ namespace UnitTest
         [Fact]
         public void Test_History_ReturnsView()
         {
+
             var controller = new FuelQuoteController();
             var httpContext = new DefaultHttpContext();
-            httpContext.Request.Headers["Cookie"] = "username_cookie=admin"; 
+            httpContext.Request.Headers["Cookie"] = "username_cookie=admin";
             controller.ControllerContext = new ControllerContext
             {
                 HttpContext = httpContext
@@ -34,13 +36,15 @@ namespace UnitTest
 
             var controller = new FuelQuoteController();
             var httpContext = new DefaultHttpContext();
-            httpContext.Request.Headers["Cookie"] = "username_cookie=admin"; 
+            httpContext.Request.Headers["Cookie"] = "username_cookie=admin";
             controller.ControllerContext = new ControllerContext
             {
                 HttpContext = httpContext
             };
 
+
             var result = controller.FuelQuoteForm() as ViewResult;
+
 
             Assert.NotNull(result);
         }
@@ -48,9 +52,10 @@ namespace UnitTest
         [Fact]
         public void Test_FuelQuoteFormDB_RedirectsToHistory()
         {
+
             var controller = new FuelQuoteController();
             var httpContext = new DefaultHttpContext();
-            httpContext.Request.Headers["Cookie"] = "username_cookie=admin"; 
+            httpContext.Request.Headers["Cookie"] = "username_cookie=admin";
             controller.ControllerContext = new ControllerContext
             {
                 HttpContext = httpContext
@@ -62,6 +67,7 @@ namespace UnitTest
             var suggestedPrice = 2.90;
             var totalAmountDue = 290.0;
             var result = controller.FuelQuoteFormDB(gallonsRequested, deliveryAddress, deliveryDate, suggestedPrice, totalAmountDue) as RedirectToActionResult;
+
             Assert.NotNull(result);
             Assert.Equal("history", result.ActionName);
             Assert.Equal("FuelQuote", result.ControllerName);
