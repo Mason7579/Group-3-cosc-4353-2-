@@ -53,24 +53,6 @@ namespace UnitTest
         }
 
         [Fact]
-        public void Test_Profile_ReturnsViewWhenDatabaseQueryReturnsNoRows()
-        {
-            
-        }
-
-        [Fact]
-        public void Test_Profile_ReturnsViewWhenExceptionDuringDatabaseInteraction()
-        {
-
-        }
-
-        [Fact]
-        public void Test_Profile_ReturnsViewWhenDatabaseQueryReturnsRows()
-        {
-
-        }
-
-        [Fact]
         public void Test_SaveProfile_UpdatesProfileWhenProfileExists()
         {
 
@@ -103,16 +85,5 @@ namespace UnitTest
             Assert.Equal("Profile saved successfully!", ((ClientProfileModel)result.Model).SuccessMessage);
         }
 
-        [Fact]
-        public void Test_SaveProfile_InsertsNewProfileWhenProfileDoesNotExist()
-        {
-            
-        }
-
-        [Fact]
-        public void Test_SaveProfile_ReturnsViewWhenExceptionDuringDatabaseInteraction()
-        {
-           
         }
     }
-}
